@@ -116,13 +116,29 @@ input[type=range]{width:100%;accent-color:#b58b36}
 .infoRow{display:flex;justify-content:space-between;border-bottom:1px solid #28271f;padding:7px 3px;font-size:13px}
 .infoRow span{color:#d2b461;letter-spacing:.12em;font-weight:900}
 .resetBtn{width:100%;border:1px solid #574c2b;background:#12130f;border-radius:11px;padding:12px;font-weight:800;margin-top:8px}
+
+.morseKey,
+.card,
+.card svg,
+.card text,
+.card rect,
+.card circle,
+.card path{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+.morseKey{
+  touch-action:manipulation;
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v9.0 · 2026-08-28</div>
+    <div class="version">v10.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -491,6 +507,13 @@ $("morseKey").addEventListener("pointerdown",pointerDown);
 $("morseKey").addEventListener("pointerup",pointerUp);
 $("morseKey").addEventListener("pointercancel",pointerCancel);
 $("morseKey").addEventListener("contextmenu",e=>e.preventDefault());
+
+["selectstart","dragstart"].forEach(evt=>{
+  $("morseKey").addEventListener(evt,e=>e.preventDefault());
+  document.querySelector(".card").addEventListener(evt,e=>e.preventDefault());
+});
+document.querySelector(".card").addEventListener("contextmenu",e=>e.preventDefault());
+
 
 function finishLetter(){
  if(!seq)return;
