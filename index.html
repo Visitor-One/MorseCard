@@ -150,13 +150,44 @@ input[type=range]{width:100%;accent-color:#b58b36}
   -webkit-touch-callout:none !important;
 }
 
+
+.writtenText{
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid #4b4329;
+  text-align:center;
+}
+.writtenLabel{
+  font-size:9px;
+  color:#777466;
+  letter-spacing:.16em;
+}
+.writtenValue{
+  min-height:36px;
+  padding:5px 2px 2px;
+  font-size:25px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:#f2efdf;
+  overflow-wrap:anywhere;
+}
+.writtenClear{
+  border:0;
+  background:transparent;
+  color:#817d6e;
+  min-height:32px;
+  padding:5px 12px;
+  font-size:10px;
+  letter-spacing:.1em;
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v11.0 · 2026-08-28</div>
+    <div class="version">v12.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -164,6 +195,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
         <button type="button" data-startmode="practice">ÜBEN<br><small style="font-size:11px;color:#9d9783">frei morsen · keine Vorgabe</small></button>
         <button type="button" data-startmode="single">BUCHSTABEN<br><small style="font-size:11px;color:#9d9783">ein Zeichen nach Vorgabe</small></button>
         <button type="button" data-startmode="words">WÖRTER<br><small style="font-size:11px;color:#9d9783">mehrere Zeichen nacheinander</small></button>
+        <button type="button" data-startmode="write">SCHREIBEN<br><small style="font-size:11px;color:#9d9783">frei morsen · Text wird notiert</small></button>
       </div>
       <div class="startLinks">
         <button type="button" class="linkBtn" data-page="infoPage">INFO</button>
@@ -194,6 +226,12 @@ input[type=range]{width:100%;accent-color:#b58b36}
       <div class="current">
         <span class="currentCode" id="currentCode"></span>
         <span class="currentLetter" id="currentLetter"></span>
+      </div>
+
+      <div class="writtenText" id="writtenBox" style="display:none">
+        <div class="writtenLabel">TEXT</div>
+        <div class="writtenValue" id="writtenValue">—</div>
+        <button type="button" class="writtenClear" id="writtenClear">LÖSCHEN</button>
       </div>
     </div>
 
@@ -281,7 +319,7 @@ const LETTERS=Object.keys(MORSE);
 const WORDS=["SOS","TEST","MORSE","HALLO","RADIO","CODE","SIGNAL","PAUSE","START","ENDE"];
 const $=id=>document.getElementById(id);
 
-let mode="practice",target="",wordIndex=0,seq="";
+let mode="practice",target="",wordIndex=0,seq="",writtenText="";
 let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
 let settings={sound:true,freq:650,dot:80,dash:180,gap:700};
@@ -407,7 +445,7 @@ document.querySelectorAll(".backSmart").forEach(b=>b.addEventListener("click",()
 
 document.querySelectorAll("[data-startmode]").forEach(b=>b.addEventListener("click",()=>{
  mode=b.dataset.startmode;
- $("modeName").textContent=mode==="practice"?"ÜBEN":mode==="single"?"BUCHSTABEN":"WÖRTER";
+ $("modeName").textContent=mode==="practice"?"ÜBEN":mode==="single"?"BUCHSTABEN":mode==="words"?"WÖRTER":"SCHREIBEN";
  newTask();
  showPage("trainerPage");
 }));
@@ -420,9 +458,14 @@ function newTask(){
  $("currentCode").textContent="";
  $("currentLetter").textContent="";
 
+ $("writtenBox").style.display=mode==="write"?"block":"none";
  if(mode==="practice"){
    $("targetBox").classList.add("hidden");
    $("resultLine").textContent="Frei morsen";
+ }else if(mode==="write"){
+   $("targetBox").classList.add("hidden");
+   $("resultLine").textContent="Text morsen";
+   updateWrittenText();
  }else if(mode==="single"){
    $("targetBox").classList.remove("hidden");
    target=LETTERS[Math.floor(Math.random()*LETTERS.length)];
@@ -537,6 +580,21 @@ function finishLetter(){
  if(!seq)return;
  const entered=REV[seq]||"?";
 
+ if(mode==="write"){
+   if(entered!=="?"){
+     writtenText+=entered;
+     updateWrittenText();
+     $("resultLine").textContent="ERKANNT: "+entered;
+   }else{
+     $("resultLine").textContent="UNBEKANNT";
+   }
+   seq="";
+   $("currentCode").textContent="";
+   $("currentLetter").textContent="";
+   drawMap("");
+   return;
+ }
+
  if(mode==="practice"){
    $("currentLetter").textContent=entered==="?"?"?":entered;
    $("resultLine").textContent=entered==="?"?"UNBEKANNT":"ERKANNT: "+entered;
@@ -577,6 +635,16 @@ function finishLetter(){
  $("currentLetter").textContent="";
  drawMap("");
 }
+
+
+function updateWrittenText(){
+  $("writtenValue").textContent=writtenText||"—";
+}
+$("writtenClear").addEventListener("click",()=>{
+  writtenText="";
+  updateWrittenText();
+  $("resultLine").textContent="Text gelöscht";
+});
 
 /* SETTINGS */
 function syncSettings(){
