@@ -181,13 +181,33 @@ input[type=range]{width:100%;accent-color:#b58b36}
   letter-spacing:.1em;
 }
 
+
+.rangeLine{
+  display:grid;
+  grid-template-columns:1fr 78px;
+  gap:10px;
+  align-items:center;
+}
+.numInput{
+  width:78px;
+  min-width:0;
+  background:#0d0e0a;
+  color:#f2efdf;
+  border:1px solid #5c5130;
+  border-radius:8px;
+  padding:7px 6px;
+  text-align:right;
+  font-size:14px;
+  font-variant-numeric:tabular-nums;
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v15.0 · 2026-08-28</div>
+    <div class="version">v16.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -263,38 +283,59 @@ input[type=range]{width:100%;accent-color:#b58b36}
 
       <div class="settingRow">
         <div class="settingHead"><span>Frequenz</span><span class="val" id="freqVal">650 Hz</span></div>
-        <input id="freqRange" type="range" min="300" max="1000" step="10" value="650">
+        <div class="rangeLine">
+          <input id="freqRange" type="range" min="300" max="1000" step="10" value="650">
+          <input id="freqInput" class="numInput" type="number" min="300" max="1000" step="10" value="650" inputmode="numeric" aria-label="Frequenz in Hertz">
+        </div>
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">50 ms</span></div>
-        <input id="dotRange" type="range" min="40" max="160" step="5" value="50">
+        <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">40 ms</span></div>
+        <div class="rangeLine">
+          <input id="dotRange" type="range" min="20" max="120" step="5" value="40">
+          <input id="dotInput" class="numInput" type="number" min="20" max="120" step="5" value="40" inputmode="numeric" aria-label="Punktlänge in Millisekunden">
+        </div>
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Strichlänge</span><span class="val" id="dashVal">180 ms</span></div>
-        <input id="dashRange" type="range" min="100" max="400" step="5" value="180">
+        <div class="settingHead"><span>Strichlänge</span><span class="val" id="dashVal">200 ms</span></div>
+        <div class="rangeLine">
+          <input id="dashRange" type="range" min="80" max="500" step="10" value="200">
+          <input id="dashInput" class="numInput" type="number" min="80" max="500" step="10" value="200" inputmode="numeric" aria-label="Strichlänge in Millisekunden">
+        </div>
         <div class="note">Die Mitte zwischen Punkt- und Strichlänge dient als Grenze für kurzen bzw. langen Tastendruck.</div>
       </div>
 
       <div class="settingRow">
         <div class="settingHead"><span>Buchstabenpause · Üben</span><span class="val" id="gapPracticeVal">500 ms</span></div>
-        <input id="gapPracticeRange" type="range" min="100" max="1000" step="25" value="500">
+        <div class="rangeLine">
+          <input id="gapPracticeRange" type="range" min="100" max="1000" step="25" value="500">
+          <input id="gapPracticeInput" class="numInput" type="number" min="100" max="1000" step="25" value="500" inputmode="numeric" aria-label="Buchstabenpause Üben in Millisekunden">
+        </div>
       </div>
 
       <div class="settingRow">
         <div class="settingHead"><span>Buchstabenpause · Buchstaben</span><span class="val" id="gapSingleVal">400 ms</span></div>
-        <input id="gapSingleRange" type="range" min="100" max="1000" step="25" value="400">
+        <div class="rangeLine">
+          <input id="gapSingleRange" type="range" min="100" max="1000" step="25" value="400">
+          <input id="gapSingleInput" class="numInput" type="number" min="100" max="1000" step="25" value="400" inputmode="numeric" aria-label="Buchstabenpause Buchstaben in Millisekunden">
+        </div>
       </div>
 
       <div class="settingRow">
         <div class="settingHead"><span>Buchstabenpause · Wörter</span><span class="val" id="gapWordsVal">400 ms</span></div>
-        <input id="gapWordsRange" type="range" min="100" max="1000" step="25" value="400">
+        <div class="rangeLine">
+          <input id="gapWordsRange" type="range" min="100" max="1000" step="25" value="400">
+          <input id="gapWordsInput" class="numInput" type="number" min="100" max="1000" step="25" value="400" inputmode="numeric" aria-label="Buchstabenpause Wörter in Millisekunden">
+        </div>
       </div>
 
       <div class="settingRow">
         <div class="settingHead"><span>Buchstabenpause · Schreiben</span><span class="val" id="gapWriteVal">200 ms</span></div>
-        <input id="gapWriteRange" type="range" min="100" max="1000" step="25" value="200">
+        <div class="rangeLine">
+          <input id="gapWriteRange" type="range" min="100" max="1000" step="25" value="200">
+          <input id="gapWriteInput" class="numInput" type="number" min="100" max="1000" step="25" value="200" inputmode="numeric" aria-label="Buchstabenpause Schreiben in Millisekunden">
+        </div>
         <div class="note">Je nach gewähltem Modus wird automatisch die dazugehörige Pause verwendet.</div>
       </div>
 
@@ -337,7 +378,7 @@ const $=id=>document.getElementById(id);
 let mode="practice",target="",wordIndex=0,seq="",writtenText="";
 let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
-let settings={sound:true,freq:650,dot:50,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
+let settings={sound:true,freq:650,dot:40,dash:200,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
 
 const NODES=[
  /* obere Reihe */
@@ -671,13 +712,13 @@ $("writtenClear").addEventListener("click",()=>{
 /* SETTINGS */
 function syncSettings(){
  $("soundToggle").checked=settings.sound;
- $("freqRange").value=settings.freq;$("freqVal").textContent=settings.freq+" Hz";
- $("dotRange").value=settings.dot;$("dotVal").textContent=settings.dot+" ms";
- $("dashRange").value=settings.dash;$("dashVal").textContent=settings.dash+" ms";
- $("gapPracticeRange").value=settings.gapPractice;$("gapPracticeVal").textContent=settings.gapPractice+" ms";
- $("gapSingleRange").value=settings.gapSingle;$("gapSingleVal").textContent=settings.gapSingle+" ms";
- $("gapWordsRange").value=settings.gapWords;$("gapWordsVal").textContent=settings.gapWords+" ms";
- $("gapWriteRange").value=settings.gapWrite;$("gapWriteVal").textContent=settings.gapWrite+" ms";
+ $("freqRange").value=settings.freq;$("freqInput").value=settings.freq;$("freqVal").textContent=settings.freq+" Hz";$("freqInput").value=settings.freq;
+ $("dotRange").value=settings.dot;$("dotInput").value=settings.dot;$("dotVal").textContent=settings.dot+" ms";$("dotInput").value=settings.dot;
+ $("dashRange").value=settings.dash;$("dashInput").value=settings.dash;$("dashVal").textContent=settings.dash+" ms";$("dashInput").value=settings.dash;
+ $("gapPracticeRange").value=settings.gapPractice;$("gapPracticeInput").value=settings.gapPractice;$("gapPracticeVal").textContent=settings.gapPractice+" ms";$("gapPracticeInput").value=settings.gapPractice;
+ $("gapSingleRange").value=settings.gapSingle;$("gapSingleInput").value=settings.gapSingle;$("gapSingleVal").textContent=settings.gapSingle+" ms";$("gapSingleInput").value=settings.gapSingle;
+ $("gapWordsRange").value=settings.gapWords;$("gapWordsInput").value=settings.gapWords;$("gapWordsVal").textContent=settings.gapWords+" ms";$("gapWordsInput").value=settings.gapWords;
+ $("gapWriteRange").value=settings.gapWrite;$("gapWriteInput").value=settings.gapWrite;$("gapWriteVal").textContent=settings.gapWrite+" ms";$("gapWriteInput").value=settings.gapWrite;
 }
 $("soundToggle").addEventListener("change",e=>settings.sound=e.target.checked);
 $("freqRange").addEventListener("input",e=>{
@@ -710,10 +751,45 @@ $("gapWriteRange").addEventListener("input",e=>{
  settings.gapWrite=+e.target.value;
  $("gapWriteVal").textContent=settings.gapWrite+" ms";
 });
+
+function clampNum(v,min,max,step){
+  v=Number(v);
+  if(!Number.isFinite(v)) return min;
+  v=Math.min(max,Math.max(min,v));
+  return Math.round(v/step)*step;
+}
+function bindNumberInput(inputId,rangeId,key,min,max,step,unit,valId){
+  $(inputId).addEventListener("change",e=>{
+    settings[key]=clampNum(e.target.value,min,max,step);
+    $(rangeId).value=settings[key];
+    e.target.value=settings[key];
+    $(valId).textContent=settings[key]+" "+unit;
+    if(key==="dot" && settings.dot>=settings.dash){
+      settings.dash=Math.min(500,settings.dot+40);
+      $("dashRange").value=settings.dash;
+      $("dashInput").value=settings.dash;
+      $("dashVal").textContent=settings.dash+" ms";
+    }
+    if(key==="dash" && settings.dash<=settings.dot){
+      settings.dot=Math.max(20,settings.dash-40);
+      $("dotRange").value=settings.dot;
+      $("dotInput").value=settings.dot;
+      $("dotVal").textContent=settings.dot+" ms";
+    }
+  });
+}
+bindNumberInput("freqInput","freqRange","freq",300,1000,10,"Hz","freqVal");
+bindNumberInput("dotInput","dotRange","dot",20,120,5,"ms","dotVal");
+bindNumberInput("dashInput","dashRange","dash",80,500,10,"ms","dashVal");
+bindNumberInput("gapPracticeInput","gapPracticeRange","gapPractice",100,1000,25,"ms","gapPracticeVal");
+bindNumberInput("gapSingleInput","gapSingleRange","gapSingle",100,1000,25,"ms","gapSingleVal");
+bindNumberInput("gapWordsInput","gapWordsRange","gapWords",100,1000,25,"ms","gapWordsVal");
+bindNumberInput("gapWriteInput","gapWriteRange","gapWrite",100,1000,25,"ms","gapWriteVal");
+
 $("testDot").addEventListener("click",()=>playFixed(settings.dot));
 $("testDash").addEventListener("click",()=>playFixed(settings.dash));
 $("resetSettings").addEventListener("click",()=>{
- settings={sound:true,freq:650,dot:50,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
+ settings={sound:true,freq:650,dot:40,dash:200,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
  syncSettings();
 });
 
