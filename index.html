@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#11120f">
+<title>Morse Trainer Card</title>
+<style>
+:root{
+  --bg:#0b0c0a; --card:#12130f; --gold:#d5a43b; --gold2:#f2ce72;
+  --line:#c9c7b7; --text:#f4f1df; --muted:#999887; --green:#75ff87;
+  --red:#ff6b63; --panel:#1a1b16;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#080907;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Inter,Arial,sans-serif}
+body{min-height:100dvh;overflow-x:hidden}
+button{font:inherit;color:inherit}
+.app{
+  width:min(100%,480px); margin:0 auto; min-height:100dvh;
+  padding:calc(10px + env(safe-area-inset-top)) 12px calc(88px + env(safe-area-inset-bottom));
+}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin:2px 2px 10px}
+.brand{font-weight:900;letter-spacing:.12em;font-size:15px}
+.version{font-size:11px;color:#8f8d7f}
+.card{
+  position:relative;background:linear-gradient(145deg,#171812 0%,#0d0e0b 100%);
+  border:2px solid var(--gold);border-radius:22px;padding:14px;
+  box-shadow:0 12px 32px #0008,inset 0 0 0 1px #f7d67d33;
+}
+.card:before{
+  content:"";position:absolute;inset:7px;border:1px solid #c9983566;border-radius:16px;pointer-events:none
+}
+.cardhead{position:relative;z-index:1;text-align:center;margin:2px 0 10px}
+.cardhead h1{font-size:26px;line-height:1;margin:0;letter-spacing:.12em}
+.cardhead p{margin:5px 0 0;color:#c8c2a5;font-size:12px;letter-spacing:.08em}
+.modebar{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.modebtn{
+  border:1px solid #8a6c2e;background:#1b1a14;border-radius:11px;padding:9px 4px;font-size:12px;font-weight:800
+}
+.modebtn.active{background:var(--gold);color:#111}
+.display{
+  position:relative;z-index:1;background:#090a08;border:1px solid #7d6a37;border-radius:15px;padding:12px;margin-bottom:10px;text-align:center
+}
+.prompt{color:#b9b49f;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.big{font-size:44px;font-weight:900;line-height:1.05;margin:6px 0 2px;min-height:48px}
+.sequence{font-size:30px;font-weight:900;letter-spacing:.18em;color:var(--gold2);min-height:38px}
+.feedback{font-size:12px;min-height:18px;margin-top:5px;color:#b8b29c}
+.feedback.ok{color:var(--green)} .feedback.bad{color:var(--red)}
+.treeWrap{position:relative;z-index:1;background:#0a0b08;border:1px solid #79652e;border-radius:15px;padding:8px;overflow:hidden}
+#tree{width:100%;height:auto;display:block;aspect-ratio:1.06/1}
+.tree-line{stroke:#bfbdaa;stroke-width:1.6;opacity:.75}
+.tree-node{fill:#171813;stroke:#d8d4c2;stroke-width:1.7}
+.tree-node.square{rx:2}
+.tree-text{fill:#f2eedb;font-size:8px;font-weight:800;text-anchor:middle;dominant-baseline:middle}
+.tree-node.active{fill:#baff7f;stroke:#eaffd4;filter:drop-shadow(0 0 5px #80ff78)}
+.tree-text.active{fill:#0c160a}
+.controls{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.signal{
+  min-height:76px;border-radius:16px;border:1px solid #8b7034;background:#171712;
+  font-size:28px;font-weight:900;box-shadow:inset 0 -5px 0 #0004
+}
+.signal:active{transform:translateY(2px)}
+.dot{color:#f4e3a5}.dash{color:#f4e3a5}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;position:relative;z-index:1}
+.action{border:1px solid #615835;background:#151610;border-radius:12px;padding:10px 4px;font-size:12px;font-weight:800}
+.scorebar{display:flex;justify-content:space-between;gap:8px;margin-top:9px;font-size:12px;color:#beb89f;position:relative;z-index:1}
+.page{display:none}.page.active{display:block}
+.infoCard{background:#11120f;border:1px solid #7e682f;border-radius:16px;padding:12px}
+.infoCard h2{margin:0 0 8px;font-size:20px}
+.infoCard p{margin:0 0 12px;color:#b8b39d;font-size:13px;line-height:1.4}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.codeRow{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border:1px solid #343323;border-radius:10px;background:#171812}
+.codeRow b{font-size:14px}.codeRow span{letter-spacing:.12em;color:var(--gold2);font-weight:900}
+.sectionTitle{margin:16px 0 7px;font-size:13px;letter-spacing:.12em;color:#d4c9a4;text-transform:uppercase}
+.howto{background:#14150f;border:1px solid #5f542f;border-radius:14px;padding:12px;font-size:13px;line-height:1.45;color:#c9c3aa}
+.nav{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(100%,480px);
+  background:#0d0e0bf2;border-top:1px solid #5f512d;display:grid;grid-template-columns:repeat(3,1fr);
+  padding:8px 10px calc(8px + env(safe-area-inset-bottom));backdrop-filter:blur(14px);z-index:20
+}
+.nav button{border:0;background:transparent;padding:9px 2px;color:#8f8d7f;font-size:12px;font-weight:800}
+.nav button.active{color:var(--gold2)}
+.smallCard{background:#12130f;border:1px solid #6e5d2d;border-radius:16px;padding:14px;margin-bottom:10px}
+.smallCard h2{margin:0 0 6px;font-size:20px}.smallCard p{margin:0;color:#aaa58f;font-size:13px;line-height:1.45}
+.optionGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.option{padding:14px;border-radius:13px;border:1px solid #6d5d2e;background:#171812;font-weight:900;font-size:18px}
+.option.ok{border-color:#6fdc78;background:#17351c}.option.bad{border-color:#df6a62;background:#381714}
+@media (max-height:700px){
+  .card{padding:10px}.treeWrap{max-height:290px}.cardhead h1{font-size:22px}.signal{min-height:62px}.big{font-size:38px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand">MORSE TRAINER</div>
+    <div class="version">v1.0 · 2026-08-28</div>
+  </div>
+
+  <section id="trainerPage" class="page active">
+    <div class="card">
+      <div class="cardhead">
+        <h1>MORSE CODE</h1>
+        <p>TRAINING CARD</p>
+      </div>
+
+      <div class="modebar">
+        <button class="modebtn active" data-mode="free">FREI</button>
+        <button class="modebtn" data-mode="letter">ZEICHEN</button>
+        <button class="modebtn" data-mode="read">LESEN</button>
+      </div>
+
+      <div class="display">
+        <div class="prompt" id="prompt">Tippe Punkt oder Strich</div>
+        <div class="big" id="big">?</div>
+        <div class="sequence" id="sequence">· · ·</div>
+        <div class="feedback" id="feedback">Der Pfad leuchtet direkt mit.</div>
+        <div class="optionGrid" id="options" style="display:none"></div>
+      </div>
+
+      <div class="treeWrap">
+        <svg id="tree" viewBox="0 0 320 300" aria-label="Morse-Baum"></svg>
+      </div>
+
+      <div class="controls" id="signalControls">
+        <button class="signal dot" id="dotBtn">●<br><span style="font-size:12px">PUNKT</span></button>
+        <button class="signal dash" id="dashBtn">━<br><span style="font-size:12px">STRICH</span></button>
+      </div>
+
+      <div class="actions">
+        <button class="action" id="backBtn">⌫ ZURÜCK</button>
+        <button class="action" id="clearBtn">LÖSCHEN</button>
+        <button class="action" id="nextBtn">NÄCHSTE</button>
+      </div>
+      <div class="scorebar"><span id="score">0 richtig</span><span id="streak">Serie 0</span></div>
+    </div>
+  </section>
+
+  <section id="learnPage" class="page">
+    <div class="smallCard">
+      <h2>So benutzt du die Karte</h2>
+      <p>Ein Punkt geht im Baum nach rechts, ein Strich nach links. Tippe die Zeichen nacheinander. Der erkannte Buchstabe und der Weg im Morse-Baum werden sofort angezeigt.</p>
+    </div>
+    <div class="smallCard">
+      <h2>Trainingsarten</h2>
+      <p><b>Frei:</b> Morsezeichen ausprobieren. <b>Zeichen:</b> Ein Buchstabe wird vorgegeben und du morsest ihn. <b>Lesen:</b> Ein Morsecode wird gezeigt und du wählst den passenden Buchstaben.</p>
+    </div>
+    <div class="howto">
+      <b>Ton:</b> Punkt = kurzer Ton, Strich = langer Ton.<br>
+      <b>Tipp:</b> Erst E/T, dann I/A/N/M lernen. Danach die nächsten Ebenen ergänzen.
+    </div>
+  </section>
+
+  <section id="infoPage" class="page">
+    <div class="infoCard">
+      <h2>Morse-Alphabet</h2>
+      <p>Internationale Morsezeichen zum Nachschauen.</p>
+      <div class="grid" id="lettersGrid"></div>
+      <div class="sectionTitle">Zahlen</div>
+      <div class="grid" id="numbersGrid"></div>
+    </div>
+  </section>
+</div>
+
+<nav class="nav">
+  <button class="active" data-page="trainerPage">TRAINER</button>
+  <button data-page="learnPage">ANLEITUNG</button>
+  <button data-page="infoPage">INFO</button>
+</nav>
+
+<script>
+const MORSE = {
+ A:".-",B:"-...",C:"-.-.",D:"-..",E:".",F:"..-.",G:"--.",H:"....",I:"..",
+ J:".---",K:"-.-",L:".-..",M:"--",N:"-.",O:"---",P:".--.",Q:"--.-",R:".-.",
+ S:"...",T:"-",U:"..-",V:"...-",W:".--",X:"-..-",Y:"-.--",Z:"--..",
+ "0":"-----","1":".----","2":"..---","3":"...--","4":"....-",
+ "5":".....","6":"-....","7":"--...","8":"---..","9":"----."
+};
+const REVERSE = Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
+const LETTERS = Object.keys(MORSE).filter(x=>/[A-Z]/.test(x));
+let seq="", mode="free", target="", correct=0, streak=0, locked=false;
+
+const el = id => document.getElementById(id);
+const promptEl=el("prompt"), bigEl=el("big"), seqEl=el("sequence"), feedbackEl=el("feedback"), optionsEl=el("options");
+
+function pretty(s){return s ? s.replaceAll(".","●").replaceAll("-","━") : "· · ·"}
+function updateScore(){el("score").textContent=`${correct} richtig`;el("streak").textContent=`Serie ${streak}`}
+
+function tone(isDash){
+  try{
+    const C=window.AudioContext||window.webkitAudioContext, ctx=tone.ctx||(tone.ctx=new C());
+    const o=ctx.createOscillator(), g=ctx.createGain();
+    o.frequency.value=650;o.type="sine";o.connect(g);g.connect(ctx.destination);
+    const d=isDash?.28:.10, t=ctx.currentTime;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.16,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.start(t);o.stop(t+d+.02);
+    if(navigator.vibrate) navigator.vibrate(isDash?60:20);
+  }catch(e){}
+}
+
+function addSignal(c){
+  if(locked || mode==="read") return;
+  if(seq.length>=5) return;
+  seq+=c; tone(c==="-"); render();
+  if(mode==="letter" && seq.length>=MORSE[target].length) checkLetter();
+}
+function render(){
+  seqEl.textContent=pretty(seq);
+  if(mode==="free"){
+    bigEl.textContent=REVERSE[seq]||"?";
+    feedbackEl.textContent=seq ? (REVERSE[seq] ? "Erkannt" : "Noch kein vollständiges Zeichen") : "Der Pfad leuchtet direkt mit.";
+  } else if(mode==="letter"){
+    bigEl.textContent=target;
+    feedbackEl.textContent=`Morse ${target}`;
+  }
+  drawTree();
+}
+function clearSeq(){seq="";locked=false;feedbackEl.className="feedback";render()}
+function back(){if(locked||mode==="read")return;seq=seq.slice(0,-1);render()}
+
+function newChallenge(){
+  locked=false; seq=""; feedbackEl.className="feedback"; optionsEl.innerHTML="";
+  if(mode==="free"){target="";promptEl.textContent="Tippe Punkt oder Strich";bigEl.textContent="?";seqEl.textContent="· · ·";optionsEl.style.display="none";render();return}
+  target=LETTERS[Math.floor(Math.random()*LETTERS.length)];
+  if(mode==="letter"){
+    promptEl.textContent="Morse diesen Buchstaben";
+    bigEl.textContent=target;seqEl.textContent="· · ·";optionsEl.style.display="none";feedbackEl.textContent="Punkt und Strich antippen";drawTree();
+  } else {
+    promptEl.textContent="Welcher Buchstabe ist das?";
+    bigEl.textContent=pretty(MORSE[target]);seqEl.textContent="";feedbackEl.textContent="Wähle die richtige Antwort";optionsEl.style.display="grid";
+    makeOptions();drawTree("");
+  }
+}
+function checkLetter(){
+  locked=true;
+  const ok=seq===MORSE[target];
+  feedbackEl.className="feedback "+(ok?"ok":"bad");
+  if(ok){correct++;streak++;feedbackEl.textContent="Richtig ✓"} else {streak=0;feedbackEl.textContent=`Falsch – ${target} = ${pretty(MORSE[target])}`}
+  updateScore();
+}
+function makeOptions(){
+  const choices=[target];
+  while(choices.length<4){
+    const c=LETTERS[Math.floor(Math.random()*LETTERS.length)];
+    if(!choices.includes(c))choices.push(c);
+  }
+  choices.sort(()=>Math.random()-.5);
+  choices.forEach(c=>{
+    const b=document.createElement("button");b.className="option";b.textContent=c;
+    b.onclick=()=>{
+      if(locked)return;locked=true;
+      const ok=c===target;b.classList.add(ok?"ok":"bad");
+      if(ok){correct++;streak++;feedbackEl.textContent="Richtig ✓";feedbackEl.className="feedback ok"}
+      else{
+        streak=0;feedbackEl.textContent=`Falsch – richtig ist ${target}`;feedbackEl.className="feedback bad";
+        [...optionsEl.children].find(x=>x.textContent===target)?.classList.add("ok");
+      }
+      updateScore();
+    };
+    optionsEl.appendChild(b);
+  });
+}
+
+function drawTree(activeSeq=seq){
+  const svg=el("tree");svg.innerHTML="";
+  const ns="http://www.w3.org/2000/svg";
+  const levels=[
+    [{s:"-",x:80,y:28},{s:".",x:240,y:28}],
+    [{s:"--",x:40,y:82},{s:"-.",x:120,y:82},{s:".-",x:200,y:82},{s:"..",x:280,y:82}],
+    [{s:"---",x:20,y:138},{s:"--.",x:60,y:138},{s:"-.-",x:100,y:138},{s:"-..",x:140,y:138},{s:".--",x:180,y:138},{s:".-.",x:220,y:138},{s:"..-",x:260,y:138},{s:"...",x:300,y:138}],
+    [{s:"--.-",x:42,y:198},{s:"--..",x:70,y:198},{s:"-.--",x:98,y:198},{s:"-.-.",x:126,y:198},{s:"-...",x:154,y:198},{s:".---",x:182,y:198},{s:".--.",x:210,y:198},{s:".-..",x:238,y:198},{s:"..-.",x:266,y:198},{s:"...-",x:294,y:198}],
+    [{s:"....",x:300,y:252},{s:"-..-",x:140,y:252}]
+  ];
+  // custom character positions approximate classic card
+  const nodes=[
+   ...levels[0],...levels[1],...levels[2],
+   {s:"----",x:18,y:198},{s:"--.-",x:46,y:198},{s:"--..",x:74,y:198},{s:"-.--",x:102,y:198},{s:"-.-.",x:130,y:198},{s:"-..-",x:158,y:198},
+   {s:".---",x:186,y:198},{s:".--.",x:214,y:198},{s:".-..",x:242,y:198},{s:"..-.",x:270,y:198},{s:"...-",x:298,y:198},
+   {s:"-...",x:130,y:252},{s:"....",x:298,y:252}
+  ].filter((n,i,a)=>a.findIndex(m=>m.s===n.s)===i);
+
+  const pos={};
+  nodes.forEach(n=>pos[n.s]=n);
+  // connect parent to child if parent exists
+  nodes.forEach(n=>{
+    if(n.s.length>1){
+      const p=pos[n.s.slice(0,-1)];
+      if(p){
+        const line=document.createElementNS(ns,"line");
+        line.setAttribute("x1",p.x);line.setAttribute("y1",p.y);line.setAttribute("x2",n.x);line.setAttribute("y2",n.y);line.setAttribute("class","tree-line");svg.appendChild(line);
+      }
+    }
+  });
+  nodes.forEach(n=>{
+    const ch=REVERSE[n.s];
+    if(!ch || !/[A-Z]/.test(ch))return;
+    const isActive=activeSeq && activeSeq.startsWith(n.s);
+    const shape=document.createElementNS(ns,n.s.endsWith("-")?"rect":"circle");
+    if(shape.tagName==="rect"){shape.setAttribute("x",n.x-10);shape.setAttribute("y",n.y-8);shape.setAttribute("width",20);shape.setAttribute("height",16);shape.setAttribute("class","tree-node square"+(isActive?" active":""))}
+    else{shape.setAttribute("cx",n.x);shape.setAttribute("cy",n.y);shape.setAttribute("r",9);shape.setAttribute("class","tree-node"+(isActive?" active":""))}
+    svg.appendChild(shape);
+    const t=document.createElementNS(ns,"text");t.setAttribute("x",n.x);t.setAttribute("y",n.y);t.setAttribute("class","tree-text"+(isActive?" active":""));t.textContent=ch;svg.appendChild(t);
+  });
+}
+
+document.querySelectorAll(".modebtn").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".modebtn").forEach(x=>x.classList.remove("active"));b.classList.add("active");mode=b.dataset.mode;newChallenge();
+}));
+el("dotBtn").onclick=()=>addSignal(".");
+el("dashBtn").onclick=()=>addSignal("-");
+el("backBtn").onclick=back;
+el("clearBtn").onclick=clearSeq;
+el("nextBtn").onclick=newChallenge;
+
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));el(b.dataset.page).classList.add("active");
+});
+
+function fillInfo(){
+  const l=el("lettersGrid"), n=el("numbersGrid");
+  LETTERS.forEach(ch=>l.insertAdjacentHTML("beforeend",`<div class="codeRow"><b>${ch}</b><span>${pretty(MORSE[ch])}</span></div>`));
+  "1234567890".split("").forEach(ch=>n.insertAdjacentHTML("beforeend",`<div class="codeRow"><b>${ch}</b><span>${pretty(MORSE[ch])}</span></div>`));
+}
+fillInfo();newChallenge();updateScore();
+</script>
+</body>
+</html>
