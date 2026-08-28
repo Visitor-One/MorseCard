@@ -60,7 +60,7 @@ button{color:inherit}
 .route{stroke:#d7d3c1;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .nodeCircle,.nodeRect{fill:#171812;stroke:#f0ebd6;stroke-width:2.4}
 .nodeCircle.active,.nodeRect.active{fill:#e8dc91;stroke:#fffbe8}
-.nodeLabel{fill:#f3efdd;font-size:13px;font-weight:850;dominant-baseline:middle}
+.nodeLabel{fill:#f3efdd;font-size:17px;font-weight:900;dominant-baseline:middle}
 .nodeLabel.active{fill:#f3efdd}
 .root{stroke:#e7e2ce;fill:none;stroke-width:2.2}
 
@@ -106,7 +106,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v4.0 · 2026-08-28</div>
+    <div class="version">v5.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -237,14 +237,42 @@ let previousPage="startPage";
 let settings={sound:true,freq:650,dot:120,dash:360,gap:700};
 
 const NODES=[
- {c:"O",m:"---",x:32,y:56,t:"r",lx:18,ly:37},{c:"M",m:"--",x:78,y:56,t:"r",lx:66,ly:37},{c:"T",m:"-",x:124,y:56,t:"r",lx:116,ly:37},
- {c:"E",m:".",x:190,y:56,t:"c",lx:182,ly:37},{c:"I",m:"..",x:226,y:56,t:"c",lx:222,ly:37},{c:"S",m:"...",x:262,y:56,t:"c",lx:255,ly:37},{c:"H",m:"....",x:298,y:56,t:"c",lx:293,ly:37},
- {c:"Q",m:"--.-",x:32,y:112,t:"r",lx:18,ly:130},{c:"G",m:"--.",x:78,y:112,t:"c",lx:91,ly:112},{c:"Z",m:"--..",x:78,y:157,t:"c",lx:91,ly:157},
- {c:"U",m:"..-",x:226,y:112,t:"r",lx:208,ly:112},{c:"V",m:"...-",x:262,y:112,t:"r",lx:278,ly:112},{c:"F",m:"..-.",x:226,y:157,t:"c",lx:239,ly:157},
- {c:"Y",m:"-.--",x:32,y:206,t:"r",lx:17,ly:187},{c:"K",m:"-.-",x:78,y:206,t:"r",lx:66,ly:187},{c:"N",m:"-.",x:124,y:206,t:"c",lx:137,ly:187},{c:"C",m:"-.-.",x:78,y:252,t:"c",lx:92,ly:252},
- {c:"A",m:".-",x:190,y:206,t:"r",lx:172,ly:224},{c:"R",m:".-.",x:226,y:206,t:"c",lx:226,ly:226},{c:"L",m:".-..",x:270,y:206,t:"c",lx:286,ly:206},
- {c:"X",m:"-..-",x:78,y:300,t:"r",lx:59,ly:300},{c:"D",m:"-..",x:124,y:300,t:"c",lx:139,ly:282},{c:"B",m:"-...",x:124,y:346,t:"c",lx:106,ly:346},
- {c:"W",m:".--",x:190,y:300,t:"r",lx:171,ly:300},{c:"P",m:".--.",x:234,y:300,t:"c",lx:250,ly:300},{c:"J",m:".---",x:190,y:346,t:"r",lx:205,ly:346}
+ /* obere Reihe */
+ {c:"O",m:"---",x:32,y:56,t:"h",lx:20,ly:31},
+ {c:"M",m:"--",x:78,y:56,t:"h",lx:68,ly:31},
+ {c:"T",m:"-",x:124,y:56,t:"h",lx:116,ly:31},
+
+ {c:"E",m:".",x:190,y:56,t:"c",lx:181,ly:31},
+ {c:"I",m:"..",x:226,y:56,t:"c",lx:222,ly:31},
+ {c:"S",m:"...",x:262,y:56,t:"c",lx:255,ly:31},
+ {c:"H",m:"....",x:298,y:56,t:"c",lx:292,ly:31},
+
+ /* linker Baum */
+ {c:"Q",m:"--.-",x:32,y:112,t:"h",lx:16,ly:137},
+ {c:"G",m:"--.",x:78,y:112,t:"c",lx:93,ly:112},
+ {c:"Z",m:"--..",x:78,y:157,t:"c",lx:94,ly:157},
+
+ {c:"Y",m:"-.--",x:32,y:206,t:"h",lx:17,ly:181},
+ {c:"K",m:"-.-",x:78,y:206,t:"h",lx:66,ly:181},
+ {c:"N",m:"-.",x:124,y:206,t:"c",lx:141,ly:188},
+ {c:"C",m:"-.-.",x:78,y:252,t:"c",lx:96,ly:252},
+
+ {c:"X",m:"-..-",x:78,y:300,t:"h",lx:53,ly:300},
+ {c:"D",m:"-..",x:124,y:300,t:"c",lx:145,ly:284},
+ {c:"B",m:"-...",x:124,y:346,t:"c",lx:103,ly:346},
+
+ /* rechter Baum – ALLE Striche senkrecht wie auf der Card */
+ {c:"U",m:"..-",x:226,y:112,t:"v",lx:205,ly:112},
+ {c:"V",m:"...-",x:262,y:112,t:"v",lx:283,ly:112},
+ {c:"F",m:"..-.",x:226,y:157,t:"c",lx:244,ly:157},
+
+ {c:"A",m:".-",x:190,y:206,t:"v",lx:171,ly:225},
+ {c:"R",m:".-.",x:226,y:206,t:"c",lx:226,ly:229},
+ {c:"L",m:".-..",x:270,y:206,t:"c",lx:291,ly:206},
+
+ {c:"W",m:".--",x:190,y:300,t:"v",lx:168,ly:300},
+ {c:"P",m:".--.",x:234,y:300,t:"c",lx:255,ly:300},
+ {c:"J",m:".---",x:190,y:346,t:"v",lx:211,ly:346}
 ];
 
 function svgEl(name,attrs={}){
@@ -269,9 +297,11 @@ function drawMap(active=""){
 
    let shape;
    if(n.t==="c"){
-     shape=svgEl("circle",{cx:n.x,cy:n.y,r:10,class:"nodeCircle"+(isActive?" active":"")});
+     shape=svgEl("circle",{cx:n.x,cy:n.y,r:11,class:"nodeCircle"+(isActive?" active":"")});
+   }else if(n.t==="v"){
+     shape=svgEl("rect",{x:n.x-7,y:n.y-19,width:14,height:38,rx:2,class:"nodeRect"+(isActive?" active":"")});
    }else{
-     shape=svgEl("rect",{x:n.x-17,y:n.y-7,width:34,height:14,rx:2,class:"nodeRect"+(isActive?" active":"")});
+     shape=svgEl("rect",{x:n.x-19,y:n.y-7,width:38,height:14,rx:2,class:"nodeRect"+(isActive?" active":"")});
    }
    svg.appendChild(shape);
 
