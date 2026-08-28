@@ -187,7 +187,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v13.0 · 2026-08-28</div>
+    <div class="version">v14.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -278,9 +278,24 @@ input[type=range]{width:100%;accent-color:#b58b36}
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Buchstabenpause</span><span class="val" id="gapVal">300 ms</span></div>
-        <input id="gapRange" type="range" min="100" max="1000" step="25" value="300">
-        <div class="note">Nach dieser Pause wird der aktuelle Buchstabe abgeschlossen.</div>
+        <div class="settingHead"><span>Buchstabenpause · Üben</span><span class="val" id="gapPracticeVal">500 ms</span></div>
+        <input id="gapPracticeRange" type="range" min="100" max="1000" step="25" value="500">
+      </div>
+
+      <div class="settingRow">
+        <div class="settingHead"><span>Buchstabenpause · Buchstaben</span><span class="val" id="gapSingleVal">400 ms</span></div>
+        <input id="gapSingleRange" type="range" min="100" max="1000" step="25" value="400">
+      </div>
+
+      <div class="settingRow">
+        <div class="settingHead"><span>Buchstabenpause · Wörter</span><span class="val" id="gapWordsVal">400 ms</span></div>
+        <input id="gapWordsRange" type="range" min="100" max="1000" step="25" value="400">
+      </div>
+
+      <div class="settingRow">
+        <div class="settingHead"><span>Buchstabenpause · Schreiben</span><span class="val" id="gapWriteVal">200 ms</span></div>
+        <input id="gapWriteRange" type="range" min="100" max="1000" step="25" value="200">
+        <div class="note">Je nach gewähltem Modus wird automatisch die dazugehörige Pause verwendet.</div>
       </div>
 
       <div class="settingRow">
@@ -322,7 +337,7 @@ const $=id=>document.getElementById(id);
 let mode="practice",target="",wordIndex=0,seq="",writtenText="";
 let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
-let settings={sound:true,freq:650,dot:80,dash:180,gap:300};
+let settings={sound:true,freq:650,dot:80,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
 
 const NODES=[
  /* obere Reihe */
@@ -532,6 +547,13 @@ function playFixed(ms){
  o.start(now);o.stop(now+d+.03);
 }
 
+function currentLetterGap(){
+ if(mode==="practice") return settings.gapPractice;
+ if(mode==="single") return settings.gapSingle;
+ if(mode==="words") return settings.gapWords;
+ return settings.gapWrite;
+}
+
 function pointerDown(e){
  e.preventDefault();
  if(e.currentTarget.setPointerCapture)e.currentTarget.setPointerCapture(e.pointerId);
@@ -559,7 +581,7 @@ function pointerUp(e){
  drawMap(seq);
 
  clearTimeout(letterTimer);
- letterTimer=setTimeout(finishLetter,settings.gap);
+ letterTimer=setTimeout(finishLetter,currentLetterGap());
 }
 function pointerCancel(){
  stopTone();pressStart=0;$("morseKey").classList.remove("pressed");
@@ -652,7 +674,10 @@ function syncSettings(){
  $("freqRange").value=settings.freq;$("freqVal").textContent=settings.freq+" Hz";
  $("dotRange").value=settings.dot;$("dotVal").textContent=settings.dot+" ms";
  $("dashRange").value=settings.dash;$("dashVal").textContent=settings.dash+" ms";
- $("gapRange").value=settings.gap;$("gapVal").textContent=settings.gap+" ms";
+ $("gapPracticeRange").value=settings.gapPractice;$("gapPracticeVal").textContent=settings.gapPractice+" ms";
+ $("gapSingleRange").value=settings.gapSingle;$("gapSingleVal").textContent=settings.gapSingle+" ms";
+ $("gapWordsRange").value=settings.gapWords;$("gapWordsVal").textContent=settings.gapWords+" ms";
+ $("gapWriteRange").value=settings.gapWrite;$("gapWriteVal").textContent=settings.gapWrite+" ms";
 }
 $("soundToggle").addEventListener("change",e=>settings.sound=e.target.checked);
 $("freqRange").addEventListener("input",e=>{
@@ -669,14 +694,26 @@ $("dashRange").addEventListener("input",e=>{
  if(settings.dash<=settings.dot)settings.dot=Math.max(40,settings.dash-40);
  syncSettings();
 });
-$("gapRange").addEventListener("input",e=>{
- settings.gap=+e.target.value;
- $("gapVal").textContent=settings.gap+" ms";
+$("gapPracticeRange").addEventListener("input",e=>{
+ settings.gapPractice=+e.target.value;
+ $("gapPracticeVal").textContent=settings.gapPractice+" ms";
+});
+$("gapSingleRange").addEventListener("input",e=>{
+ settings.gapSingle=+e.target.value;
+ $("gapSingleVal").textContent=settings.gapSingle+" ms";
+});
+$("gapWordsRange").addEventListener("input",e=>{
+ settings.gapWords=+e.target.value;
+ $("gapWordsVal").textContent=settings.gapWords+" ms";
+});
+$("gapWriteRange").addEventListener("input",e=>{
+ settings.gapWrite=+e.target.value;
+ $("gapWriteVal").textContent=settings.gapWrite+" ms";
 });
 $("testDot").addEventListener("click",()=>playFixed(settings.dot));
 $("testDash").addEventListener("click",()=>playFixed(settings.dash));
 $("resetSettings").addEventListener("click",()=>{
- settings={sound:true,freq:650,dot:80,dash:180,gap:300};
+ settings={sound:true,freq:650,dot:80,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
  syncSettings();
 });
 
