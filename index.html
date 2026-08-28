@@ -7,7 +7,7 @@
 <title>Morse Training Card</title>
 <style>
 :root{
-  --bg:#080906;--card:#10110d;--gold:#c89a3a;--line:#e5e1ce;
+  --bg:#080906;--card:#10110d;--gold:#c89a3a;--line:#e7e2ce;
   --text:#f2efdf;--muted:#9d9987;--green:#9af17d;--red:#ef7b70;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -29,14 +29,14 @@ button{color:inherit}
   padding:18px 8px 40px;text-align:center
 }
 .startTitle{font-size:30px;font-weight:900;letter-spacing:.13em;margin:0}
-.startSub{font-size:12px;color:#b5ae93;letter-spacing:.18em;margin:7px 0 40px}
-.modeChoice{display:grid;gap:12px}
+.startSub{font-size:12px;color:#b5ae93;letter-spacing:.18em;margin:7px 0 34px}
+.modeChoice{display:grid;gap:10px}
 .modeChoice button{
-  min-height:78px;border:1px solid #8d7135;border-radius:15px;background:#12130f;
-  font-weight:900;font-size:19px;letter-spacing:.06em
+  min-height:70px;border:1px solid #8d7135;border-radius:14px;background:#12130f;
+  font-weight:900;font-size:18px;letter-spacing:.05em
 }
 .modeChoice button:active{background:#211e13}
-.startLinks{display:flex;justify-content:center;gap:25px;margin-top:28px}
+.startLinks{display:flex;justify-content:center;gap:25px;margin-top:26px}
 .linkBtn{border:0;background:transparent;color:#a49e89;font-size:12px;padding:12px}
 
 /* TRAINER */
@@ -49,23 +49,24 @@ button{color:inherit}
 .cardHead{text-align:center;margin:0 0 5px}
 .cardHead b{font-size:20px;letter-spacing:.15em}
 .target{text-align:center;border-bottom:1px solid #4b4329;padding:5px 0 8px;margin-bottom:6px}
+.target.hidden{display:none}
 .targetLabel{font-size:10px;color:#817d6d;letter-spacing:.12em}
 .targetValue{font-size:30px;font-weight:900;letter-spacing:.12em;min-height:37px}
 .progress{font-size:11px;color:#98927e;min-height:15px;margin-top:2px;letter-spacing:.08em}
 .feedback{font-size:11px;min-height:16px;margin-top:2px}
 .feedback.ok{color:var(--green)}.feedback.bad{color:var(--red)}
 
-#map{width:100%;display:block;aspect-ratio:.88/1;max-height:390px}
+#map{width:100%;display:block;aspect-ratio:.88/1;max-height:400px}
 .route{stroke:#d7d3c1;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
-.nodeCircle,.nodeRect{fill:#14150f;stroke:#e7e2ce;stroke-width:2.2}
-.nodeCircle.active,.nodeRect.active{fill:#d9d39a;stroke:#fffbe6}
-.nodeLabel{fill:#f3efdd;font-size:14px;font-weight:850;text-anchor:middle;dominant-baseline:middle}
-.nodeLabel.active{fill:#12130d}
+.nodeCircle,.nodeRect{fill:#171812;stroke:#f0ebd6;stroke-width:2.4}
+.nodeCircle.active,.nodeRect.active{fill:#e8dc91;stroke:#fffbe8}
+.nodeLabel{fill:#f3efdd;font-size:13px;font-weight:850;dominant-baseline:middle}
+.nodeLabel.active{fill:#f3efdd}
 .root{stroke:#e7e2ce;fill:none;stroke-width:2.2}
 
-.current{text-align:center;height:34px;margin-top:2px}
+.current{text-align:center;min-height:40px;margin-top:2px}
 .currentCode{font-size:22px;font-weight:900;letter-spacing:.16em;color:#d5b664}
-.currentLetter{font-size:11px;color:#777466;margin-left:5px}
+.currentLetter{font-size:16px;color:#ded8c0;margin-left:7px;font-weight:800}
 
 .keyArea{padding:14px 0 2px;display:flex;flex-direction:column;align-items:center}
 .morseKey{
@@ -81,7 +82,7 @@ button{color:inherit}
 .subTop{display:flex;align-items:center;margin-bottom:12px}
 .subTop h1{font-size:19px;margin:0;flex:1;text-align:center;letter-spacing:.1em}
 .panel{border:1px solid #554a29;border-radius:14px;padding:14px;margin-bottom:10px;background:#10110d}
-.settingRow{padding:10px 0;border-bottom:1px solid #29281f}
+.settingRow{padding:11px 0;border-bottom:1px solid #29281f}
 .settingRow:last-child{border-bottom:0}
 .settingHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:13px}
 .val{color:#c9ae69;font-variant-numeric:tabular-nums}
@@ -92,7 +93,9 @@ input[type=range]{width:100%;accent-color:#b58b36}
 .slider{position:absolute;inset:0;border:1px solid #625630;border-radius:20px;background:#181914}
 .slider:before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;border-radius:50%;background:#777467;transition:.15s}
 .switch input:checked + .slider:before{transform:translateX(22px);background:#d1ae59}
-.note{font-size:11px;color:#858170;line-height:1.45;margin-top:8px}
+.note{font-size:11px;color:#858170;line-height:1.45;margin-top:7px}
+.testRow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.testBtn{border:1px solid #6c5a2f;background:#15160f;border-radius:10px;padding:10px;font-weight:850;font-size:12px}
 .infoGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .infoRow{display:flex;justify-content:space-between;border-bottom:1px solid #28271f;padding:7px 3px;font-size:13px}
 .infoRow span{color:#d2b461;letter-spacing:.12em;font-weight:900}
@@ -103,13 +106,14 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v3.0 · 2026-08-28</div>
+    <div class="version">v4.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
       <div class="modeChoice">
-        <button type="button" data-startmode="single">EINZELN<br><small style="font-size:11px;color:#9d9783">Buchstaben trainieren</small></button>
-        <button type="button" data-startmode="words">WÖRTER<br><small style="font-size:11px;color:#9d9783">mehrere Buchstaben</small></button>
+        <button type="button" data-startmode="practice">ÜBEN<br><small style="font-size:11px;color:#9d9783">frei morsen · keine Vorgabe</small></button>
+        <button type="button" data-startmode="single">BUCHSTABEN<br><small style="font-size:11px;color:#9d9783">ein Zeichen nach Vorgabe</small></button>
+        <button type="button" data-startmode="words">WÖRTER<br><small style="font-size:11px;color:#9d9783">mehrere Zeichen nacheinander</small></button>
       </div>
       <div class="startLinks">
         <button type="button" class="linkBtn" data-page="infoPage">INFO</button>
@@ -121,15 +125,16 @@ input[type=range]{width:100%;accent-color:#b58b36}
   <section id="trainerPage" class="page">
     <div class="topbar">
       <button type="button" class="iconBtn" data-page="startPage">‹</button>
-      <div class="modeName" id="modeName">EINZELN</div>
+      <div class="modeName" id="modeName">ÜBEN</div>
       <button type="button" class="iconBtn" data-page="settingsPage">⚙︎</button>
     </div>
 
     <div class="card">
       <div class="cardHead"><b>MORSE CODE</b></div>
-      <div class="target">
-        <div class="targetLabel" id="targetLabel">MORSE DIESEN BUCHSTABEN</div>
-        <div class="targetValue" id="targetValue">A</div>
+
+      <div class="target hidden" id="targetBox">
+        <div class="targetLabel" id="targetLabel"></div>
+        <div class="targetValue" id="targetValue"></div>
         <div class="progress" id="progress"></div>
         <div class="feedback" id="feedback"></div>
       </div>
@@ -155,6 +160,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
       <h1>SETTINGS</h1>
       <div style="width:44px"></div>
     </div>
+
     <div class="panel">
       <div class="settingRow switchRow">
         <div>
@@ -175,15 +181,29 @@ input[type=range]{width:100%;accent-color:#b58b36}
       <div class="settingRow">
         <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">120 ms</span></div>
         <input id="dotRange" type="range" min="70" max="300" step="10" value="120">
-        <div class="note">Ab dieser eingestellten Zeiteinheit wird zwischen kurzem und langem Tastendruck unterschieden. Strich = 3 × Punktlänge.</div>
+      </div>
+
+      <div class="settingRow">
+        <div class="settingHead"><span>Strichlänge</span><span class="val" id="dashVal">360 ms</span></div>
+        <input id="dashRange" type="range" min="180" max="900" step="10" value="360">
+        <div class="note">Die Mitte zwischen Punkt- und Strichlänge dient als Grenze für kurzen bzw. langen Tastendruck.</div>
       </div>
 
       <div class="settingRow">
         <div class="settingHead"><span>Buchstabenpause</span><span class="val" id="gapVal">700 ms</span></div>
         <input id="gapRange" type="range" min="350" max="1400" step="50" value="700">
-        <div class="note">Nach dieser Pause wird der eingegebene Buchstabe abgeschlossen.</div>
+        <div class="note">Nach dieser Pause wird der aktuelle Buchstabe abgeschlossen.</div>
+      </div>
+
+      <div class="settingRow">
+        <div class="settingHead"><span>Ton testen</span></div>
+        <div class="testRow">
+          <button type="button" class="testBtn" id="testDot">· PUNKT</button>
+          <button type="button" class="testBtn" id="testDash">— STRICH</button>
+        </div>
       </div>
     </div>
+
     <button type="button" id="resetSettings" class="resetBtn">STANDARDWERTE</button>
   </section>
 
@@ -197,6 +217,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
       <div class="infoGrid" id="infoGrid"></div>
     </div>
   </section>
+
 </div>
 
 <script>
@@ -210,20 +231,20 @@ const LETTERS=Object.keys(MORSE);
 const WORDS=["SOS","TEST","MORSE","HALLO","RADIO","CODE","SIGNAL","PAUSE","START","ENDE"];
 const $=id=>document.getElementById(id);
 
-let mode="single", target="", wordIndex=0, seq="";
-let pressStart=0, letterTimer=null, audioCtx=null, osc=null, gain=null;
+let mode="practice",target="",wordIndex=0,seq="";
+let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
-let settings={sound:true,freq:650,dot:120,gap:700};
+let settings={sound:true,freq:650,dot:120,dash:360,gap:700};
 
 const NODES=[
- {c:"O",m:"---",x:32,y:56,t:"r"},{c:"M",m:"--",x:78,y:56,t:"r"},{c:"T",m:"-",x:124,y:56,t:"r"},
- {c:"E",m:".",x:190,y:56,t:"c"},{c:"I",m:"..",x:226,y:56,t:"c"},{c:"S",m:"...",x:262,y:56,t:"c"},{c:"H",m:"....",x:298,y:56,t:"c"},
- {c:"Q",m:"--.-",x:32,y:112,t:"r"},{c:"G",m:"--.",x:78,y:112,t:"c"},{c:"Z",m:"--..",x:78,y:157,t:"c"},
- {c:"U",m:"..-",x:226,y:112,t:"r"},{c:"V",m:"...-",x:262,y:112,t:"r"},{c:"F",m:"..-.",x:226,y:157,t:"c"},
- {c:"Y",m:"-.--",x:32,y:206,t:"r"},{c:"K",m:"-.-",x:78,y:206,t:"r"},{c:"N",m:"-.",x:124,y:206,t:"c"},{c:"C",m:"-.-.",x:78,y:252,t:"c"},
- {c:"A",m:".-",x:190,y:206,t:"r"},{c:"R",m:".-.",x:226,y:206,t:"c"},{c:"L",m:".-..",x:270,y:206,t:"c"},
- {c:"X",m:"-..-",x:78,y:300,t:"r"},{c:"D",m:"-..",x:124,y:300,t:"c"},{c:"B",m:"-...",x:124,y:346,t:"c"},
- {c:"W",m:".--",x:190,y:300,t:"r"},{c:"P",m:".--.",x:234,y:300,t:"c"},{c:"J",m:".---",x:190,y:346,t:"r"}
+ {c:"O",m:"---",x:32,y:56,t:"r",lx:18,ly:37},{c:"M",m:"--",x:78,y:56,t:"r",lx:66,ly:37},{c:"T",m:"-",x:124,y:56,t:"r",lx:116,ly:37},
+ {c:"E",m:".",x:190,y:56,t:"c",lx:182,ly:37},{c:"I",m:"..",x:226,y:56,t:"c",lx:222,ly:37},{c:"S",m:"...",x:262,y:56,t:"c",lx:255,ly:37},{c:"H",m:"....",x:298,y:56,t:"c",lx:293,ly:37},
+ {c:"Q",m:"--.-",x:32,y:112,t:"r",lx:18,ly:130},{c:"G",m:"--.",x:78,y:112,t:"c",lx:91,ly:112},{c:"Z",m:"--..",x:78,y:157,t:"c",lx:91,ly:157},
+ {c:"U",m:"..-",x:226,y:112,t:"r",lx:208,ly:112},{c:"V",m:"...-",x:262,y:112,t:"r",lx:278,ly:112},{c:"F",m:"..-.",x:226,y:157,t:"c",lx:239,ly:157},
+ {c:"Y",m:"-.--",x:32,y:206,t:"r",lx:17,ly:187},{c:"K",m:"-.-",x:78,y:206,t:"r",lx:66,ly:187},{c:"N",m:"-.",x:124,y:206,t:"c",lx:137,ly:187},{c:"C",m:"-.-.",x:78,y:252,t:"c",lx:92,ly:252},
+ {c:"A",m:".-",x:190,y:206,t:"r",lx:172,ly:224},{c:"R",m:".-.",x:226,y:206,t:"c",lx:226,ly:226},{c:"L",m:".-..",x:270,y:206,t:"c",lx:286,ly:206},
+ {c:"X",m:"-..-",x:78,y:300,t:"r",lx:59,ly:300},{c:"D",m:"-..",x:124,y:300,t:"c",lx:139,ly:282},{c:"B",m:"-...",x:124,y:346,t:"c",lx:106,ly:346},
+ {c:"W",m:".--",x:190,y:300,t:"r",lx:171,ly:300},{c:"P",m:".--.",x:234,y:300,t:"c",lx:250,ly:300},{c:"J",m:".---",x:190,y:346,t:"r",lx:205,ly:346}
 ];
 
 function svgEl(name,attrs={}){
@@ -234,57 +255,82 @@ function svgEl(name,attrs={}){
 function drawMap(active=""){
  const svg=$("map");svg.innerHTML="";
  svg.appendChild(svgEl("path",{d:"M157 53 L157 35 M149 35 L165 35 L157 44 Z",class:"root"}));
+
  [
- "M32 56 H157","M157 56 H298","M78 56 V157","M32 112 H78",
+ "M32 56 H157","M157 56 H298",
+ "M78 56 V157","M32 112 H78",
  "M124 56 V346","M32 206 H124","M78 206 V252","M78 300 H124",
- "M190 56 V346","M190 206 H270","M190 300 H234","M226 56 V157","M262 56 V112"
+ "M190 56 V346","M190 206 H270","M190 300 H234",
+ "M226 56 V157","M262 56 V112"
  ].forEach(d=>svg.appendChild(svgEl("path",{d,class:"route"})));
 
  for(const n of NODES){
    const isActive=active && active.startsWith(n.m);
-   let s;
-   if(n.t==="c") s=svgEl("circle",{cx:n.x,cy:n.y,r:11,class:"nodeCircle"+(isActive?" active":"")});
-   else s=svgEl("rect",{x:n.x-13,y:n.y-9,width:26,height:18,rx:2,class:"nodeRect"+(isActive?" active":"")});
-   svg.appendChild(s);
-   const t=svgEl("text",{x:n.x,y:n.y,class:"nodeLabel"+(isActive?" active":"")});
-   t.textContent=n.c;svg.appendChild(t);
+
+   let shape;
+   if(n.t==="c"){
+     shape=svgEl("circle",{cx:n.x,cy:n.y,r:10,class:"nodeCircle"+(isActive?" active":"")});
+   }else{
+     shape=svgEl("rect",{x:n.x-17,y:n.y-7,width:34,height:14,rx:2,class:"nodeRect"+(isActive?" active":"")});
+   }
+   svg.appendChild(shape);
+
+   const t=svgEl("text",{x:n.lx,y:n.ly,class:"nodeLabel"+(isActive?" active":"")});
+   t.textContent=n.c;
+   svg.appendChild(t);
  }
 }
 
 function showPage(id){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  $(id).classList.add("active");
- if(id!=="settingsPage"&&id!=="infoPage") previousPage=id;
+ if(id!=="settingsPage"&&id!=="infoPage")previousPage=id;
 }
 document.querySelectorAll("[data-page]").forEach(b=>{
- b.addEventListener("click",()=>{previousPage=document.querySelector(".page.active").id;showPage(b.dataset.page)});
+ b.addEventListener("click",()=>{
+   previousPage=document.querySelector(".page.active").id;
+   showPage(b.dataset.page);
+ });
 });
 document.querySelectorAll(".backSmart").forEach(b=>b.addEventListener("click",()=>showPage(previousPage||"startPage")));
 
 document.querySelectorAll("[data-startmode]").forEach(b=>b.addEventListener("click",()=>{
  mode=b.dataset.startmode;
- $("modeName").textContent=mode==="single"?"EINZELN":"WÖRTER";
- newTask(); showPage("trainerPage");
+ $("modeName").textContent=mode==="practice"?"ÜBEN":mode==="single"?"BUCHSTABEN":"WÖRTER";
+ newTask();
+ showPage("trainerPage");
 }));
 
 function newTask(){
- seq="";clearTimeout(letterTimer);
- $("feedback").className="feedback";$("feedback").textContent="";
- $("currentCode").textContent="";$("currentLetter").textContent="";
- if(mode==="single"){
+ seq="";
+ clearTimeout(letterTimer);
+ $("feedback").className="feedback";
+ $("feedback").textContent="";
+ $("currentCode").textContent="";
+ $("currentLetter").textContent="";
+
+ if(mode==="practice"){
+   $("targetBox").classList.add("hidden");
+   $("resultLine").textContent="Frei morsen";
+ }else if(mode==="single"){
+   $("targetBox").classList.remove("hidden");
    target=LETTERS[Math.floor(Math.random()*LETTERS.length)];
    $("targetLabel").textContent="MORSE DIESEN BUCHSTABEN";
    $("targetValue").textContent=target;
    $("progress").textContent="";
+   $("resultLine").textContent="Taster drücken und halten";
  }else{
+   $("targetBox").classList.remove("hidden");
    target=WORDS[Math.floor(Math.random()*WORDS.length)];
    wordIndex=0;
    $("targetLabel").textContent="MORSE DIESES WORT";
    $("targetValue").textContent=target;
    updateWordProgress();
+   $("resultLine").textContent="Taster drücken und halten";
  }
  drawMap("");
 }
+
 function updateWordProgress(){
  const done=target.slice(0,wordIndex);
  const rest=target.slice(wordIndex);
@@ -298,9 +344,12 @@ function ensureAudio(){
 function startTone(){
  if(!settings.sound)return;
  ensureAudio();
- osc=audioCtx.createOscillator();gain=audioCtx.createGain();
- osc.type="sine";osc.frequency.value=settings.freq;
- osc.connect(gain);gain.connect(audioCtx.destination);
+ osc=audioCtx.createOscillator();
+ gain=audioCtx.createGain();
+ osc.type="sine";
+ osc.frequency.value=settings.freq;
+ osc.connect(gain);
+ gain.connect(audioCtx.destination);
  const now=audioCtx.currentTime;
  gain.gain.setValueAtTime(.0001,now);
  gain.gain.exponentialRampToValueAtTime(.14,now+.01);
@@ -315,10 +364,23 @@ function stopTone(){
  try{osc.stop(now+.025)}catch(e){}
  osc=null;gain=null;
 }
+function playFixed(ms){
+ if(!settings.sound)return;
+ ensureAudio();
+ const o=audioCtx.createOscillator();
+ const g=audioCtx.createGain();
+ o.type="sine";o.frequency.value=settings.freq;o.connect(g);g.connect(audioCtx.destination);
+ const now=audioCtx.currentTime,d=ms/1000;
+ g.gain.setValueAtTime(.0001,now);
+ g.gain.exponentialRampToValueAtTime(.14,now+.01);
+ g.gain.setValueAtTime(.14,Math.max(now+.012,now+d-.02));
+ g.gain.exponentialRampToValueAtTime(.0001,now+d);
+ o.start(now);o.stop(now+d+.03);
+}
 
 function pointerDown(e){
  e.preventDefault();
- if(e.currentTarget.setPointerCapture) e.currentTarget.setPointerCapture(e.pointerId);
+ if(e.currentTarget.setPointerCapture)e.currentTarget.setPointerCapture(e.pointerId);
  pressStart=performance.now();
  $("morseKey").classList.add("pressed");
  $("resultLine").textContent="…";
@@ -330,14 +392,18 @@ function pointerUp(e){
  e.preventDefault();
  stopTone();
  $("morseKey").classList.remove("pressed");
- const held=performance.now()-pressStart;pressStart=0;
- const threshold=settings.dot*2;
+
+ const held=performance.now()-pressStart;
+ pressStart=0;
+ const threshold=(settings.dot+settings.dash)/2;
  const symbol=held<threshold?".":"-";
+
  seq+=symbol;
  $("currentCode").textContent=seq.replaceAll(".","·").replaceAll("-","—");
  $("currentLetter").textContent=REV[seq]||"";
  $("resultLine").textContent=symbol==="."?"PUNKT":"STRICH";
  drawMap(seq);
+
  clearTimeout(letterTimer);
  letterTimer=setTimeout(finishLetter,settings.gap);
 }
@@ -352,9 +418,24 @@ $("morseKey").addEventListener("contextmenu",e=>e.preventDefault());
 function finishLetter(){
  if(!seq)return;
  const entered=REV[seq]||"?";
+
+ if(mode==="practice"){
+   $("currentLetter").textContent=entered==="?"?"?":entered;
+   $("resultLine").textContent=entered==="?"?"UNBEKANNT":"ERKANNT: "+entered;
+   seq="";
+   setTimeout(()=>{
+     $("currentCode").textContent="";
+     $("currentLetter").textContent="";
+     drawMap("");
+   },650);
+   return;
+ }
+
  const expected=mode==="single"?target:target[wordIndex];
  const ok=entered===expected;
+
  $("feedback").className="feedback "+(ok?"ok":"bad");
+
  if(ok){
    $("feedback").textContent="RICHTIG";
    if(mode==="single"){
@@ -372,34 +453,57 @@ function finishLetter(){
  }else{
    $("feedback").textContent="NOCHMAL";
  }
+
  seq="";
  $("currentCode").textContent="";
  $("currentLetter").textContent="";
  drawMap("");
 }
 
-/* Settings */
+/* SETTINGS */
 function syncSettings(){
  $("soundToggle").checked=settings.sound;
  $("freqRange").value=settings.freq;$("freqVal").textContent=settings.freq+" Hz";
  $("dotRange").value=settings.dot;$("dotVal").textContent=settings.dot+" ms";
+ $("dashRange").value=settings.dash;$("dashVal").textContent=settings.dash+" ms";
  $("gapRange").value=settings.gap;$("gapVal").textContent=settings.gap+" ms";
 }
 $("soundToggle").addEventListener("change",e=>settings.sound=e.target.checked);
-$("freqRange").addEventListener("input",e=>{settings.freq=+e.target.value;$("freqVal").textContent=settings.freq+" Hz"});
-$("dotRange").addEventListener("input",e=>{settings.dot=+e.target.value;$("dotVal").textContent=settings.dot+" ms"});
-$("gapRange").addEventListener("input",e=>{settings.gap=+e.target.value;$("gapVal").textContent=settings.gap+" ms"});
+$("freqRange").addEventListener("input",e=>{
+ settings.freq=+e.target.value;
+ $("freqVal").textContent=settings.freq+" Hz";
+});
+$("dotRange").addEventListener("input",e=>{
+ settings.dot=+e.target.value;
+ if(settings.dot>=settings.dash)settings.dash=Math.min(900,settings.dot+60);
+ syncSettings();
+});
+$("dashRange").addEventListener("input",e=>{
+ settings.dash=+e.target.value;
+ if(settings.dash<=settings.dot)settings.dot=Math.max(70,settings.dash-60);
+ syncSettings();
+});
+$("gapRange").addEventListener("input",e=>{
+ settings.gap=+e.target.value;
+ $("gapVal").textContent=settings.gap+" ms";
+});
+$("testDot").addEventListener("click",()=>playFixed(settings.dot));
+$("testDash").addEventListener("click",()=>playFixed(settings.dash));
 $("resetSettings").addEventListener("click",()=>{
- settings={sound:true,freq:650,dot:120,gap:700};syncSettings();
+ settings={sound:true,freq:650,dot:120,dash:360,gap:700};
+ syncSettings();
 });
 
-/* Info */
+/* INFO */
 for(const c of LETTERS){
- $("infoGrid").insertAdjacentHTML("beforeend",
- `<div class="infoRow"><b>${c}</b><span>${MORSE[c].replaceAll(".","·").replaceAll("-","—")}</span></div>`);
+ $("infoGrid").insertAdjacentHTML(
+   "beforeend",
+   `<div class="infoRow"><b>${c}</b><span>${MORSE[c].replaceAll(".","·").replaceAll("-","—")}</span></div>`
+ );
 }
 
-syncSettings();drawMap("");
+syncSettings();
+drawMap("");
 </script>
 </body>
 </html>
