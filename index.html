@@ -187,7 +187,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v14.0 · 2026-08-28</div>
+    <div class="version">v15.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -267,8 +267,8 @@ input[type=range]{width:100%;accent-color:#b58b36}
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">80 ms</span></div>
-        <input id="dotRange" type="range" min="40" max="160" step="5" value="80">
+        <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">50 ms</span></div>
+        <input id="dotRange" type="range" min="40" max="160" step="5" value="50">
       </div>
 
       <div class="settingRow">
@@ -337,7 +337,7 @@ const $=id=>document.getElementById(id);
 let mode="practice",target="",wordIndex=0,seq="",writtenText="";
 let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
-let settings={sound:true,freq:650,dot:80,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
+let settings={sound:true,freq:650,dot:50,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
 
 const NODES=[
  /* obere Reihe */
@@ -713,7 +713,7 @@ $("gapWriteRange").addEventListener("input",e=>{
 $("testDot").addEventListener("click",()=>playFixed(settings.dot));
 $("testDash").addEventListener("click",()=>playFixed(settings.dash));
 $("resetSettings").addEventListener("click",()=>{
- settings={sound:true,freq:650,dot:80,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
+ settings={sound:true,freq:650,dot:50,dash:180,gapPractice:500,gapSingle:400,gapWords:400,gapWrite:200};
  syncSettings();
 });
 
