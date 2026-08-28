@@ -132,13 +132,31 @@ input[type=range]{width:100%;accent-color:#b58b36}
   touch-action:manipulation;
 }
 
+
+/* iOS: Im kompletten Trainer keinerlei Text-/Shape-Auswahl zulassen */
+#trainerPage,
+#trainerPage *{
+  -webkit-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none !important;
+}
+#trainerPage .keyHint,
+#trainerPage .resultLine,
+#trainerPage .modeName,
+#trainerPage .cardHead,
+#trainerPage .current{
+  -webkit-user-select:none !important;
+  user-select:none !important;
+  -webkit-touch-callout:none !important;
+}
+
 </style>
 </head>
 <body>
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v10.0 · 2026-08-28</div>
+    <div class="version">v11.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -601,6 +619,27 @@ for(const c of LETTERS){
    `<div class="infoRow"><b>${c}</b><span>${MORSE[c].replaceAll(".","·").replaceAll("-","—")}</span></div>`
  );
 }
+
+
+/* iOS Safari kann trotz CSS bei schnellen Mehrfachtaps kurz eine Auswahl erzeugen.
+   Im Trainer wird eine solche Auswahl sofort wieder entfernt. */
+const trainerPageEl = document.getElementById("trainerPage");
+
+["selectstart","dragstart"].forEach(evt=>{
+  trainerPageEl.addEventListener(evt,e=>e.preventDefault(),{passive:false});
+});
+
+trainerPageEl.addEventListener("pointerdown",()=>{
+  const sel=window.getSelection && window.getSelection();
+  if(sel) sel.removeAllRanges();
+},{passive:true});
+
+document.addEventListener("selectionchange",()=>{
+  if(trainerPageEl.classList.contains("active")){
+    const sel=window.getSelection && window.getSelection();
+    if(sel && sel.rangeCount) sel.removeAllRanges();
+  }
+});
 
 syncSettings();
 drawMap("");
