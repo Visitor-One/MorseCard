@@ -59,8 +59,9 @@ button{color:inherit}
 #map{width:100%;display:block;aspect-ratio:.88/1;max-height:400px}
 .route{stroke:#d7d3c1;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
 .nodeCircle,.nodeRect{fill:#171812;stroke:#f0ebd6;stroke-width:2.4}
-.nodeCircle.active,.nodeRect.active{fill:#e8dc91;stroke:#fffbe8}
-.nodeLabel{fill:#f3efdd;font-size:17px;font-weight:900;dominant-baseline:middle}
+.nodeCircle.active{fill:#69e86f;stroke:#caffcd}
+.nodeRect.active{fill:#e95850;stroke:#ffd0cc}
+.nodeLabel{fill:#f3efdd;font-size:17px;font-weight:500;dominant-baseline:middle}
 .nodeLabel.active{fill:#f3efdd}
 .root{stroke:#e7e2ce;fill:none;stroke-width:2.2}
 
@@ -106,7 +107,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v5.0 · 2026-08-28</div>
+    <div class="version">v6.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -148,7 +149,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
     </div>
 
     <div class="keyArea">
-      <button type="button" id="morseKey" class="morseKey" aria-label="Morsetaster">DRÜCKEN</button>
+      <button type="button" id="morseKey" class="morseKey" aria-label="Morsetaster"></button>
       <div class="keyHint">kurz = Punkt · &nbsp;&nbsp; lang = Strich —</div>
       <div class="resultLine" id="resultLine">Taster drücken und halten</div>
     </div>
@@ -252,14 +253,14 @@ const NODES=[
  {c:"G",m:"--.",x:78,y:112,t:"c",lx:93,ly:112},
  {c:"Z",m:"--..",x:78,y:157,t:"c",lx:94,ly:157},
 
- {c:"Y",m:"-.--",x:32,y:206,t:"h",lx:17,ly:181},
- {c:"K",m:"-.-",x:78,y:206,t:"h",lx:66,ly:181},
+ {c:"Y",m:"-.--",x:32,y:206,t:"h",lx:22,ly:181},
+ {c:"K",m:"-.-",x:78,y:206,t:"h",lx:70,ly:181},
  {c:"N",m:"-.",x:124,y:206,t:"c",lx:141,ly:188},
  {c:"C",m:"-.-.",x:78,y:252,t:"c",lx:96,ly:252},
 
- {c:"X",m:"-..-",x:78,y:300,t:"h",lx:53,ly:300},
+ {c:"X",m:"-..-",x:78,y:300,t:"h",lx:46,ly:300},
  {c:"D",m:"-..",x:124,y:300,t:"c",lx:145,ly:284},
- {c:"B",m:"-...",x:124,y:346,t:"c",lx:103,ly:346},
+ {c:"B",m:"-...",x:124,y:346,t:"c",lx:96,ly:346},
 
  /* rechter Baum – ALLE Striche senkrecht wie auf der Card */
  {c:"U",m:"..-",x:226,y:112,t:"v",lx:205,ly:112},
@@ -270,9 +271,9 @@ const NODES=[
  {c:"R",m:".-.",x:226,y:206,t:"c",lx:226,ly:229},
  {c:"L",m:".-..",x:270,y:206,t:"c",lx:291,ly:206},
 
- {c:"W",m:".--",x:190,y:300,t:"v",lx:168,ly:300},
+ {c:"W",m:".--",x:190,y:300,t:"v",lx:160,ly:300},
  {c:"P",m:".--.",x:234,y:300,t:"c",lx:255,ly:300},
- {c:"J",m:".---",x:190,y:346,t:"v",lx:211,ly:346}
+ {c:"J",m:".---",x:190,y:346,t:"v",lx:205,ly:346}
 ];
 
 function svgEl(name,attrs={}){
