@@ -65,16 +65,16 @@ button{color:inherit}
   filter:drop-shadow(0 1px 1px #000);
 }
 .nodeCircle.active{
-  fill:#69e86f;
-  stroke:#e3ffe5;
+  fill:url(#greenLed);
+  stroke:#e9ffe8;
   stroke-width:2.8;
-  filter:drop-shadow(0 0 3px #b7ffb9) drop-shadow(0 0 8px #55ff66);
+  filter:url(#greenGlow);
 }
 .nodeRect.active{
-  fill:#e95850;
-  stroke:#ffd9d5;
+  fill:url(#redLed);
+  stroke:#ffe1de;
   stroke-width:2.8;
-  filter:drop-shadow(0 0 3px #ffb3ad) drop-shadow(0 0 8px #ff4b42);
+  filter:url(#redGlow);
 }
 .nodeLabel{fill:#f3efdd;font-size:17px;font-weight:500;dominant-baseline:middle}
 .nodeLabel.active{fill:#f3efdd}
@@ -122,7 +122,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v7.0 · 2026-08-28</div>
+    <div class="version">v8.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -195,13 +195,13 @@ input[type=range]{width:100%;accent-color:#b58b36}
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">120 ms</span></div>
-        <input id="dotRange" type="range" min="70" max="300" step="10" value="120">
+        <div class="settingHead"><span>Punktlänge</span><span class="val" id="dotVal">80 ms</span></div>
+        <input id="dotRange" type="range" min="40" max="160" step="5" value="80">
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Strichlänge</span><span class="val" id="dashVal">360 ms</span></div>
-        <input id="dashRange" type="range" min="180" max="900" step="10" value="360">
+        <div class="settingHead"><span>Strichlänge</span><span class="val" id="dashVal">180 ms</span></div>
+        <input id="dashRange" type="range" min="100" max="400" step="5" value="180">
         <div class="note">Die Mitte zwischen Punkt- und Strichlänge dient als Grenze für kurzen bzw. langen Tastendruck.</div>
       </div>
 
@@ -250,7 +250,7 @@ const $=id=>document.getElementById(id);
 let mode="practice",target="",wordIndex=0,seq="";
 let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
-let settings={sound:true,freq:650,dot:120,dash:360,gap:700};
+let settings={sound:true,freq:650,dot:80,dash:180,gap:700};
 
 const NODES=[
  /* obere Reihe */
@@ -273,9 +273,9 @@ const NODES=[
  {c:"N",m:"-.",x:124,y:206,t:"c",lx:141,ly:188},
  {c:"C",m:"-.-.",x:78,y:252,t:"c",lx:96,ly:252},
 
- {c:"X",m:"-..-",x:78,y:300,t:"h",lx:46,ly:300},
+ {c:"X",m:"-..-",x:78,y:300,t:"h",lx:44,ly:300},
  {c:"D",m:"-..",x:124,y:300,t:"c",lx:145,ly:284},
- {c:"B",m:"-...",x:124,y:346,t:"c",lx:96,ly:346},
+ {c:"B",m:"-...",x:124,y:346,t:"c",lx:94,ly:346},
 
  /* rechter Baum – ALLE Striche senkrecht wie auf der Card */
  {c:"U",m:"..-",x:226,y:112,t:"v",lx:205,ly:112},
@@ -284,10 +284,10 @@ const NODES=[
 
  {c:"A",m:".-",x:190,y:206,t:"v",lx:171,ly:225},
  {c:"R",m:".-.",x:226,y:206,t:"c",lx:226,ly:229},
- {c:"L",m:".-..",x:270,y:206,t:"c",lx:291,ly:206},
+ {c:"L",m:".-..",x:262,y:206,t:"c",lx:283,ly:206},
 
- {c:"W",m:".--",x:190,y:300,t:"v",lx:160,ly:300},
- {c:"P",m:".--.",x:234,y:300,t:"c",lx:255,ly:300},
+ {c:"W",m:".--",x:190,y:300,t:"v",lx:157,ly:300},
+ {c:"P",m:".--.",x:226,y:300,t:"c",lx:247,ly:300},
  {c:"J",m:".---",x:190,y:346,t:"v",lx:205,ly:346}
 ];
 
@@ -298,13 +298,44 @@ function svgEl(name,attrs={}){
 }
 function drawMap(active=""){
  const svg=$("map");svg.innerHTML="";
+ const defs=svgEl("defs");
+
+ const greenGrad=svgEl("radialGradient",{id:"greenLed",cx:"35%",cy:"30%",r:"75%"});
+ [
+   ["0%","#e8ffe2"],["18%","#8cff69"],["52%","#24c83f"],["100%","#075b18"]
+ ].forEach(([o,c])=>greenGrad.appendChild(svgEl("stop",{offset:o,"stop-color":c})));
+ defs.appendChild(greenGrad);
+
+ const redGrad=svgEl("linearGradient",{id:"redLed",x1:"0%",y1:"0%",x2:"100%",y2:"100%"});
+ [
+   ["0%","#ffd1cb"],["20%","#ff665d"],["58%","#d9201c"],["100%","#6c0808"]
+ ].forEach(([o,c])=>redGrad.appendChild(svgEl("stop",{offset:o,"stop-color":c})));
+ defs.appendChild(redGrad);
+
+ const greenGlow=svgEl("filter",{id:"greenGlow",x:"-80%",y:"-80%",width:"260%",height:"260%"});
+ greenGlow.appendChild(svgEl("feGaussianBlur",{stdDeviation:"3.7",result:"blur"}));
+ greenGlow.appendChild(svgEl("feMerge"));
+ const gMerge=greenGlow.lastChild;
+ gMerge.appendChild(svgEl("feMergeNode",{in:"blur"}));
+ gMerge.appendChild(svgEl("feMergeNode",{in:"SourceGraphic"}));
+ defs.appendChild(greenGlow);
+
+ const redGlow=svgEl("filter",{id:"redGlow",x:"-80%",y:"-80%",width:"260%",height:"260%"});
+ redGlow.appendChild(svgEl("feGaussianBlur",{stdDeviation:"3.7",result:"blur"}));
+ redGlow.appendChild(svgEl("feMerge"));
+ const rMerge=redGlow.lastChild;
+ rMerge.appendChild(svgEl("feMergeNode",{in:"blur"}));
+ rMerge.appendChild(svgEl("feMergeNode",{in:"SourceGraphic"}));
+ defs.appendChild(redGlow);
+
+ svg.appendChild(defs);
  svg.appendChild(svgEl("path",{d:"M157 53 L157 35 M149 35 L165 35 L157 44 Z",class:"root"}));
 
  [
  "M32 56 H157","M157 56 H298",
  "M78 56 V157","M32 112 H78",
  "M124 56 V346","M32 206 H124","M78 206 V252","M78 300 H124",
- "M190 56 V346","M190 206 H270","M190 300 H234",
+ "M190 56 V346","M190 206 H262","M190 300 H226",
  "M226 56 V157","M262 56 V112"
  ].forEach(d=>svg.appendChild(svgEl("path",{d,class:"route"})));
 
@@ -315,9 +346,9 @@ function drawMap(active=""){
    if(n.t==="c"){
      shape=svgEl("circle",{cx:n.x,cy:n.y,r:11,class:"nodeCircle"+(isActive?" active":"")});
    }else if(n.t==="v"){
-     shape=svgEl("rect",{x:n.x-11,y:n.y-23,width:22,height:46,rx:4,class:"nodeRect"+(isActive?" active":"")});
+     shape=svgEl("rect",{x:n.x-11,y:n.y-17,width:22,height:34,rx:4,class:"nodeRect"+(isActive?" active":"")});
    }else{
-     shape=svgEl("rect",{x:n.x-23,y:n.y-11,width:46,height:22,rx:4,class:"nodeRect"+(isActive?" active":"")});
+     shape=svgEl("rect",{x:n.x-17,y:n.y-11,width:34,height:22,rx:4,class:"nodeRect"+(isActive?" active":"")});
    }
    svg.appendChild(shape);
 
@@ -521,12 +552,12 @@ $("freqRange").addEventListener("input",e=>{
 });
 $("dotRange").addEventListener("input",e=>{
  settings.dot=+e.target.value;
- if(settings.dot>=settings.dash)settings.dash=Math.min(900,settings.dot+60);
+ if(settings.dot>=settings.dash)settings.dash=Math.min(400,settings.dot+40);
  syncSettings();
 });
 $("dashRange").addEventListener("input",e=>{
  settings.dash=+e.target.value;
- if(settings.dash<=settings.dot)settings.dot=Math.max(70,settings.dash-60);
+ if(settings.dash<=settings.dot)settings.dot=Math.max(40,settings.dash-40);
  syncSettings();
 });
 $("gapRange").addEventListener("input",e=>{
@@ -536,7 +567,7 @@ $("gapRange").addEventListener("input",e=>{
 $("testDot").addEventListener("click",()=>playFixed(settings.dot));
 $("testDash").addEventListener("click",()=>playFixed(settings.dash));
 $("resetSettings").addEventListener("click",()=>{
- settings={sound:true,freq:650,dot:120,dash:360,gap:700};
+ settings={sound:true,freq:650,dot:80,dash:180,gap:700};
  syncSettings();
 });
 
