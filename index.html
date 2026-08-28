@@ -187,7 +187,7 @@ input[type=range]{width:100%;accent-color:#b58b36}
 <div class="app">
 
   <section id="startPage" class="page active">
-    <div class="version">v12.0 · 2026-08-28</div>
+    <div class="version">v13.0 · 2026-08-28</div>
     <div class="start">
       <h1 class="startTitle">MORSE</h1>
       <div class="startSub">TRAINING CARD</div>
@@ -278,8 +278,8 @@ input[type=range]{width:100%;accent-color:#b58b36}
       </div>
 
       <div class="settingRow">
-        <div class="settingHead"><span>Buchstabenpause</span><span class="val" id="gapVal">700 ms</span></div>
-        <input id="gapRange" type="range" min="350" max="1400" step="50" value="700">
+        <div class="settingHead"><span>Buchstabenpause</span><span class="val" id="gapVal">300 ms</span></div>
+        <input id="gapRange" type="range" min="100" max="1000" step="25" value="300">
         <div class="note">Nach dieser Pause wird der aktuelle Buchstabe abgeschlossen.</div>
       </div>
 
@@ -322,7 +322,7 @@ const $=id=>document.getElementById(id);
 let mode="practice",target="",wordIndex=0,seq="",writtenText="";
 let pressStart=0,letterTimer=null,audioCtx=null,osc=null,gain=null;
 let previousPage="startPage";
-let settings={sound:true,freq:650,dot:80,dash:180,gap:700};
+let settings={sound:true,freq:650,dot:80,dash:180,gap:300};
 
 const NODES=[
  /* obere Reihe */
@@ -676,7 +676,7 @@ $("gapRange").addEventListener("input",e=>{
 $("testDot").addEventListener("click",()=>playFixed(settings.dot));
 $("testDash").addEventListener("click",()=>playFixed(settings.dash));
 $("resetSettings").addEventListener("click",()=>{
- settings={sound:true,freq:650,dot:80,dash:180,gap:700};
+ settings={sound:true,freq:650,dot:80,dash:180,gap:300};
  syncSettings();
 });
 
